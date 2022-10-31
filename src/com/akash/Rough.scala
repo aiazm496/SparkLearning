@@ -11,22 +11,17 @@ object Rough {
     Logger.getLogger("org").setLevel(Level.ERROR)
 
     val spark = SparkSession.builder().appName("rough")
-      .master("local[*]")
+      .master("local[*]").config("spark.sql.shuffle.partitions",3)
       .getOrCreate()
 
     val df  = spark.read.format("csv").option("header",true)
-    .option("path","C:/TrendyTech/bigDataset/full_dataset.tsv").load
+    .option("path","C:/TrendyTech/week16_downloads/members.csv").load
 
-    df.show(5,false)
-    df.printSchema()
+    println(df.rdd.getNumPartitions)
 
-    //find the tweet_ids with maximum tweet
-//    val groupedDf = df.groupBy("tweet_id").count().alias("count_tweets")
-//      .sort(col("count_tweets").desc)
-//
-//    groupedDf.show(5,false)
+    println(df.count())
 
-
+    scala.io.StdIn.readLine()
     spark.stop()
 
   }

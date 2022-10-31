@@ -46,6 +46,7 @@ object StructuredStreaming_5 extends App{
   //processing.
   //watermark time will be 30minutes less of that time.
   //those records before watermark time will be cleared from state store.
+  //as it is stateful transformation(stream join) important to clear state store through watermark.
 
   impressionStreamDf.printSchema()
   clickStreamDf.printSchema()

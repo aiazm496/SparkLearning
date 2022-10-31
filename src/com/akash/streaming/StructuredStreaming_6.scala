@@ -56,15 +56,15 @@ object StructuredStreaming_6 extends App{
     expr("impressionID = clickID and ClickTime between  ImpressionTime and " +
       "ImpressionTime + interval 15 minute"),"inner")
 
-  val joinQuery = joinedDf.writeStream.format("console").outputMode("append")
+  val joinQuery = joinedDf.writeStream.format("console")
+    .outputMode("append")
     .option("checkpointLocation","checkpoint-location7").trigger(Trigger.ProcessingTime("15 seconds"))
     .start
 
   //watermark boundary max event time in impressions(imp1) is 12:00 -> 11:30 ( minus 30mins)
   //watermark boundary max event time in clicks(c1) is 14:18 -> 13:48 ( minus 30mins)
-  //send 1 more impression(imp2) with imp time as 13:00 ( watermark -> 12:30) and click time(c2)
-  // as 16:00 so, watermark -> 15:30. both imp1 and c1 should be cleared from state store.
-  //try by sending c1 again, it should not match with any imp as imp1 was removed.
+  //as per cleaning , it will remove all impression records before 11:30 and click records
+  //before click time of 13:48.
 
   joinQuery.awaitTermination
   spark.stop
