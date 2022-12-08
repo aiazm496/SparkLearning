@@ -51,6 +51,8 @@ object DfJoin2 {
     //if shuffling is avoided it is a huge performance gain as shuffling is heavy computation process.
     //to turn off broadcast join run spark.sql("SET spark.sql.autoBroadcastJoinThreshold = -1")
 
+    //if right join, right table should be big
+
 
     //simple join
     //inner
